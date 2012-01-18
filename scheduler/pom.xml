@@ -155,7 +155,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.payneteasy.paynetmerhant.WebServer</mainClass>
+                            <mainClass>com.payneteasy.mysql.scheduler.Start</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
