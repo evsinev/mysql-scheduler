@@ -13,23 +13,17 @@ create procedure set_task_completed(i_stsk_id int(10))
                when schedule_strategy = 'E' then
                  case
                    when substring(retry_interval, -2) = 'MI' then
-                     date_add(@sv_exec_end_date,
+                     date_add(v_exec_end_date,
                               interval substring(retry_interval, 1, length(retry_interval) - 2) minute
                              )
                    when substring(retry_interval, -2) = 'HH' then
-                     date_add(@sv_exec_end_date,
-                              interval substring(retry_interval, 1, length(retry_interval) - 2) hour
-                             )
+                     date_add(v_exec_end_date, interval substring(retry_interval, 1, length(retry_interval) - 2) hour)
                    when substring(retry_interval, -1) = 'D' then
-                     date_add(@sv_exec_end_date, interval substring(retry_interval, 1, length(retry_interval) - 1) day)
+                     date_add(v_exec_end_date, interval substring(retry_interval, 1, length(retry_interval) - 1) day)
                    when substring(retry_interval, -1) = 'M' then
-                     date_add(@sv_exec_end_date,
-                              interval substring(retry_interval, 1, length(retry_interval) - 1) month
-                             )
+                     date_add(v_exec_end_date, interval substring(retry_interval, 1, length(retry_interval) - 1) month)
                    when substring(retry_interval, -1) = 'Y' then
-                     date_add(@sv_exec_end_date,
-                              interval substring(retry_interval, 1, length(retry_interval) - 1) year
-                             )
+                     date_add(v_exec_end_date, interval substring(retry_interval, 1, length(retry_interval) - 1) year)
                  end
                when schedule_strategy = 'S' then
                  case
@@ -38,7 +32,8 @@ create procedure set_task_completed(i_stsk_id int(10))
                        task_start_date,
                        interval   substring(retry_interval, 1, length(retry_interval) - 2)
                                 * (  floor(
-                                         (floor(time_to_sec(timediff(v_exec_end_date, task_start_date)) / 60) + 1)
+                                         time_to_sec(timediff(v_exec_end_date, task_start_date))
+                                       / 60
                                        / substring(retry_interval, 1, length(retry_interval) - 2)
                                      )
                                    + 1) minute
@@ -48,7 +43,9 @@ create procedure set_task_completed(i_stsk_id int(10))
                        task_start_date,
                        interval   substring(retry_interval, 1, length(retry_interval) - 2)
                                 * (  floor(
-                                         (floor(time_to_sec(timediff(v_exec_end_date, task_start_date)) / 60 / 60) + 1)
+                                         time_to_sec(timediff(v_exec_end_date, task_start_date))
+                                       / 60
+                                       / 60
                                        / substring(retry_interval, 1, length(retry_interval) - 2)
                                      )
                                    + 1) hour
@@ -58,10 +55,7 @@ create procedure set_task_completed(i_stsk_id int(10))
                        task_start_date,
                        interval   substring(retry_interval, 1, length(retry_interval) - 1)
                                 * (  floor(
-                                         (  floor(
-                                              time_to_sec(timediff(v_exec_end_date, task_start_date)) / 60 / 60 / 24
-                                            )
-                                          + 1)
+                                         datediff(v_exec_end_date, task_start_date)
                                        / substring(retry_interval, 1, length(retry_interval) - 1)
                                      )
                                    + 1) day
@@ -71,12 +65,9 @@ create procedure set_task_completed(i_stsk_id int(10))
                        task_start_date,
                        interval   substring(retry_interval, 1, length(retry_interval) - 1)
                                 * (  floor(
-                                         (  floor(
-                                              period_diff(date_format(v_exec_end_date, '%Y%m'),
-                                                          date_format(task_start_date, '%Y%m')
-                                                         )
-                                            )
-                                          + 1)
+                                         period_diff(date_format(v_exec_end_date, '%Y%m'),
+                                                     date_format(task_start_date, '%Y%m')
+                                                    )
                                        / substring(retry_interval, 1, length(retry_interval) - 1)
                                      )
                                    + 1) month
@@ -86,17 +77,32 @@ create procedure set_task_completed(i_stsk_id int(10))
                        task_start_date,
                        interval   substring(retry_interval, 1, length(retry_interval) - 1)
                                 * (  floor(
-                                         (  floor(
-                                                period_diff(date_format(v_exec_end_date, '%Y%m'),
-                                                            date_format(task_start_date, '%Y%m')
-                                                           )
-                                              / 12
-                                            )
-                                          + 1)
+                                         period_diff(date_format(v_exec_end_date, '%Y%m'),
+                                                     date_format(task_start_date, '%Y%m')
+                                                    )
+                                       / 12
                                        / substring(retry_interval, 1, length(retry_interval) - 1)
                                      )
                                    + 1) year
                      )
+                 end
+             end,
+           task_start_date      =
+             case
+               when schedule_strategy = 'E' then
+                 task_start_date
+               when schedule_strategy = 'S' then
+                 case
+                   when substring(retry_interval, -2) = 'MI' then
+                     date_sub(exec_next_date, interval substring(retry_interval, 1, length(retry_interval) - 2) minute)
+                   when substring(retry_interval, -2) = 'HH' then
+                     date_sub(exec_next_date, interval substring(retry_interval, 1, length(retry_interval) - 2) hour)
+                   when substring(retry_interval, -1) = 'D' then
+                     date_sub(exec_next_date, interval substring(retry_interval, 1, length(retry_interval) - 1) day)
+                   when substring(retry_interval, -1) = 'M' then
+                     date_sub(exec_next_date, interval substring(retry_interval, 1, length(retry_interval) - 1) month)
+                   when substring(retry_interval, -1) = 'Y' then
+                     date_sub(exec_next_date, interval substring(retry_interval, 1, length(retry_interval) - 1) year)
                  end
              end
      where i_stsk_id = stsk_id;
