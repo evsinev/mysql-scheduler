@@ -9,15 +9,17 @@ create procedure mi_create_java_sched(i_create_date datetime)
     declare v_user_count          int(10);
 
     declare
-      cur_privileges cursor for
-        select concat("grant execute on procedure ",
-                      routine_schema,
-                      ".",
-                      routine_name,
-                      " to 'java_sched'@'localhost'"
-                     )
-          from information_schema.routines
-         where routine_schema = 'sched' and routine_name in ('get_procedures_resultset');
+      cur_privileges cursor for select concat("grant execute on procedure ",
+                                              routine_schema,
+                                              ".",
+                                              routine_name,
+                                              " to 'java_sched'@'localhost'"
+                                             )
+                                  from information_schema.routines
+                                 where     routine_schema = 'sched'
+                                       and (   routine_name in ('create_collections')
+                                            or routine_name like 'get%'
+                                            or routine_name like 'set%');
 
     declare continue handler for not found set ex_no_records_found = 1;
     select count(1)
