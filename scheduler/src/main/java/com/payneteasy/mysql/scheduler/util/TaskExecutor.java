@@ -1,4 +1,4 @@
-package com.payneteasy.mysql.scheduler;
+package com.payneteasy.mysql.scheduler.util;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
