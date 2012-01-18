@@ -25,5 +25,6 @@ engine = innodb;
 \. set/set_task_starting.sql
 \. set/set_task_running.sql
 \. set/set_task_failed.sql
+\. set/set_task_completed.sql
 
 commit;
