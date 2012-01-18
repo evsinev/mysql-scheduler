@@ -10,8 +10,8 @@ import java.util.List;
 public class Scheduler {
 
     private static final Logger LOG = LoggerFactory.getLogger(Scheduler.class);
-    private static final int MAX_THREADS = 2 ;
-    private static final int SLEEP_MS = 1000 ;
+    private static final int MAX_THREADS = SchedulerConfig.getIntConfig(SchedulerConfig.Config.MAX_THREADS) ;
+    private static final int SLEEP_MS = SchedulerConfig.getIntConfig(SchedulerConfig.Config.SLEEP_MS) ;
 
     public void start() {
         theIsStarted = true;
