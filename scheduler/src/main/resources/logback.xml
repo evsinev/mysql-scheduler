@@ -13,6 +13,7 @@
     </root>
 
     <!--<logger name="org.springframework" level="DEBUG"/>-->
+    <!--<logger name="com.mysql" level="DEBUG"/>-->
     <!--<logger name="com.googlecode" level="DEBUG"/>-->
 
 

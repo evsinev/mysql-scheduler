@@ -1,4 +1,4 @@
-package com.payneteasy.mysql.scheduler;
+package com.payneteasy.mysql.scheduler.guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -17,7 +17,7 @@ public class DataSourceModule extends AbstractModule {
         DataSource provideDataSource() {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/sched");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/sched?logger=Slf4JLogger");
 //        dataSource.addConnectionProperty("noAccessToProcedureBodies", "true");
         dataSource.setUsername("java_sched");
         dataSource.setPassword("123java_sched123");

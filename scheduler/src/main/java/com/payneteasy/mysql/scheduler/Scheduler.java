@@ -41,13 +41,8 @@ public class Scheduler {
         for (TTask task : tasks) {
             LOG.info("Starting {}...", task.getTaskName());
             theSchedulerService.setTaskStarting(task.getTaskId());
+            theTaskExecutor.execute(new TaskRunner(theSchedulerService, task));
 
-            try {
-                theSchedulerService.runTask(task.getTaskId());
-            } catch (Exception e) {
-                LOG.error("can't run "+task.getTaskName(), e);
-                //theSchedulerService.setTaskFailed(task.getTaskId(), e.getMessage());
-            }
         }
 
 

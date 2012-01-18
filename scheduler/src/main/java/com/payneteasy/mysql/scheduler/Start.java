@@ -2,6 +2,7 @@ package com.payneteasy.mysql.scheduler;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.payneteasy.mysql.scheduler.guice.SchedulerModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +23,7 @@ public class Start {
             }
         });
 
+        LOG.info("Scheduler started");
         scheduler.start();
     }
 }

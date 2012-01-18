@@ -145,11 +145,6 @@
             <version>5.1.18</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <!--<version>3.0.0</version>-->
-        </dependency>
 
     </dependencies>
 
@@ -160,7 +155,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.payneteasy.paynetmerhant.WebServer</mainClass>
+                            <mainClass>com.payneteasy.mysql.scheduler.Start</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
