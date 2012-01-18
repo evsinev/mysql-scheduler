@@ -61,3 +61,4 @@ $$
 delimiter ;
 call mi_create_java_sched(now());
 drop procedure if exists mi_create_java_sched;
+grant select on mysql.proc to 'java_sched' @'localhost';
