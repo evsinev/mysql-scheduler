@@ -2,6 +2,8 @@ package com.payneteasy.mysql.scheduler;
 
 import com.google.inject.Inject;
 import com.payneteasy.mysql.scheduler.dao.model.TTask;
+import com.payneteasy.mysql.scheduler.util.ExecutorServiceUtils;
+import com.payneteasy.mysql.scheduler.util.TaskExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +33,11 @@ public class Scheduler {
 
     public void stop() {
         theIsStarted = false;
+        try {
+            ExecutorServiceUtils.shutdownAndAwaitTermination(theTaskExecutor, "scheduler");
+        } catch (InterruptedException e) {
+            LOG.error("Can't stop executor", e);
+        }
     }
 
     private void runTasks() {
