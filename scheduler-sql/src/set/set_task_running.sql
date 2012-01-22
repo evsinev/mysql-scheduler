@@ -25,10 +25,10 @@ create procedure set_task_running(i_stsk_id int(10))
     if v_task_definition is null then
       call raise_application_error('No task to run', 'no.task.to.run');
     else
-      set @sv_ddl_statement   = v_task_definition;
-      prepare v_stmt from @sv_ddl_statement;
-      execute v_stmt;
-      deallocate prepare v_stmt;
+      set @sv_task_ddl_statement   = v_task_definition;
+      prepare v_task_stmt from @sv_task_ddl_statement;
+      execute v_task_stmt;
+      deallocate prepare v_task_stmt;
       call set_task_completed(i_stsk_id);
     end if;
   end

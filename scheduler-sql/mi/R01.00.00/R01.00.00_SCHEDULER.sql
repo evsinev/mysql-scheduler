@@ -4,7 +4,7 @@ drop table if exists scheduled_tasks;
 
 create table scheduled_tasks (
    stsk_id                    int(10) unsigned not null auto_increment,
-   task_name                  varchar(32),
+   task_name                  varchar(64),
    task_description           varchar(256),
    task_definition            text,
    task_start_date            datetime,
@@ -16,6 +16,7 @@ create table scheduled_tasks (
    exec_status                varchar(1) not null default 'C',
    exce_max_run_time          int(10) not null default 15,
    primary key pk_scheduled_tasks(stsk_id),
+   constraint unq_scheduled_tasks_task_name unique(task_name),
    index idx_scheduled_tasks_runnable(exec_status, exec_start_date)
 )
 engine = innodb;
