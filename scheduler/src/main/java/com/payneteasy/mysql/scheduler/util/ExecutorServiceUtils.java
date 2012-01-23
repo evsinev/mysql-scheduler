@@ -16,13 +16,17 @@ public class ExecutorServiceUtils {
         aExecutor.shutdown();
 
         for(int i=0; i<10 && !aExecutor.isTerminated(); i++) {
-            LOG.info("{}:    Waiting threads to be done", aExecutorName);
+            LOG.info("{}:    Waiting threads to be done ...", aExecutorName);
             aExecutor.awaitTermination(10, TimeUnit.SECONDS);
         }
 
         if(!aExecutor.isTerminated()) {
             LOG.error("{}: Cannot stop executor", aExecutorName);
         }
+        LOG.info("{}: Executor stopped", aExecutorName);
     }
 
+    public static TaskExecutor createTaskExecutor(int aThreads) {
+        return new TaskExecutor(aThreads);
+    }
 }

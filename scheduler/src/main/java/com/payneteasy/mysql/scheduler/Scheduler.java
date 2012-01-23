@@ -60,7 +60,7 @@ public class Scheduler {
     }
 
 
-    private final TaskExecutor theTaskExecutor = new TaskExecutor(MAX_THREADS);
+    private final TaskExecutor theTaskExecutor = ExecutorServiceUtils.createTaskExecutor(MAX_THREADS);
 
     @Inject
     private ISchedulerService theSchedulerService;
