@@ -6,24 +6,24 @@ import org.slf4j.LoggerFactory;
 
 public class TaskRunner implements Runnable {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TaskRunner.class);
+    private final Logger LOG;
 
     public TaskRunner(ISchedulerService aSchedulerService, TTask aTask) {
+        LOG = LoggerFactory.getLogger("task."+aTask.getTaskName());
         theSchedulerService = aSchedulerService;
         theTask = aTask;
     }
 
     public void run() {
+        long startTime = System.currentTimeMillis();
+//        final String taskName = theTask.getTaskName();
         try {
-            long startTime = System.currentTimeMillis();
-            LOG.info("Task {} running ...", theTask.getTaskName());
+            LOG.info("starting ...");
             theSchedulerService.runTask(theTask.getTaskId());
-            LOG.info("Task {} done in {} ms", theTask.getTaskName(), System.currentTimeMillis()-startTime);
+            LOG.info("done in {} ms", System.currentTimeMillis()-startTime);
         } catch (Exception e) {
-            LOG.error("Task {} ERROR:"+theTask.getTaskName());
+            LOG.error("done in {} ms with errors:\n{}", new Object[] {System.currentTimeMillis()-startTime, getExceptionsText(e)});
             theSchedulerService.setTaskFailed(theTask.getTaskId(), getMessages(e));
-            logException(e, theTask.getTaskName());
-
         }
 
     }
@@ -40,14 +40,17 @@ public class TaskRunner implements Runnable {
         return sb.toString();
     }
 
-    private void logException(Exception aException, String aTaskName) {
+    private String getExceptionsText(Exception aException) {
         Throwable e = aException;
-        
+        StringBuilder sb = new StringBuilder();
+        int count=1;
         while(e!=null) {
-            LOG.error("    {}: {} - {}", new String[] {aTaskName, e.getClass().getSimpleName(), e.getMessage()});
+            sb.append("    ").append(count).append(". ").append(e.getMessage()).append("\n");
             e = e.getCause();
+            count++;
         }
-        LOG.debug("Detailed exception: ", e);
+        LOG.debug("Detailed exception:", e);
+        return sb.toString();
     }
 
     private final ISchedulerService theSchedulerService;
