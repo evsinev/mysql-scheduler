@@ -18,7 +18,7 @@ public class TaskRunner implements Runnable {
         long startTime = System.currentTimeMillis();
 //        final String taskName = theTask.getTaskName();
         try {
-            LOG.info("starting ...");
+            LOG.info("started");
             theSchedulerService.runTask(theTask.getTaskId());
             LOG.info("done in {} ms", System.currentTimeMillis()-startTime);
         } catch (Exception e) {

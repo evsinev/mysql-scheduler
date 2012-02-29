@@ -46,7 +46,7 @@ public class Scheduler {
         List<TTask> tasks = theSchedulerService.getTasks(getAvailableThreadsCount());
 
         for (TTask task : tasks) {
-            LOG.info("Starting {}...", task.getTaskName());
+            LOG.debug("Starting {}...", task.getTaskName());
             theSchedulerService.setTaskStarting(task.getTaskId());
             theTaskExecutor.execute(new TaskRunner(theSchedulerService, task));
 
