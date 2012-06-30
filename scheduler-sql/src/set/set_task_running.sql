@@ -9,7 +9,7 @@ create procedure set_task_running(i_stsk_id int(10))
      where i_stsk_id = stsk_id and exec_status in ('S');
 
     if row_count() <> 1 then
-      call raise_application_error('Impossible to set task status', 'task.set.status.failed');
+      call raise_application_error('task.set.status.failed');
     end if;
 
     insert into scheduled_task_logs(stsk_stsk_id, exec_status)
@@ -23,7 +23,7 @@ create procedure set_task_running(i_stsk_id int(10))
      where i_stsk_id = stsk_id and exec_status in ('R');
 
     if v_task_definition is null then
-      call raise_application_error('No task to run', 'no.task.to.run');
+      call raise_application_error('no.task.to.run');
     else
       set @sv_task_ddl_statement   = v_task_definition;
       prepare v_task_stmt from @sv_task_ddl_statement;

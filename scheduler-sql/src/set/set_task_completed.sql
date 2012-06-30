@@ -108,7 +108,7 @@ create procedure set_task_completed(i_stsk_id int(10))
      where i_stsk_id = stsk_id;
 
     if row_count() <> 1 then
-      call raise_application_error('Impossible to set task status', 'task.set.status.failed');
+      call raise_application_error('task.set.status.failed');
     end if;
 
     insert into scheduled_task_logs(stsk_stsk_id, exec_end_date, exec_status)
