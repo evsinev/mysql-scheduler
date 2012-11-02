@@ -19,8 +19,12 @@ public class Scheduler {
         theIsStarted = true;
          while ( theIsStarted ) {
 
-             runTasks();
-             
+             try {
+                 runTasks();
+             } catch (Exception e) {
+                 LOG.error("Can't execute tasks", e);
+             }
+
              try {
                  Thread.sleep(SLEEP_MS);
              } catch (InterruptedException e) {
