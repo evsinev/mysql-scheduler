@@ -23,6 +23,7 @@ public class DataSourceModule extends AbstractModule {
         dataSource.setPassword(SchedulerConfig.getConfig(SchedulerConfig.Config.PASSWORD));
         dataSource.setDefaultAutoCommit(false);
         dataSource.setValidationQuery("call create_collections()");
+        dataSource.setMaxActive(SchedulerConfig.getIntConfig(SchedulerConfig.Config.MAX_THREADS));
 
         return dataSource;
     }
