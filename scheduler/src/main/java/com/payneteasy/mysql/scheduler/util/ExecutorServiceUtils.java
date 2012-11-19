@@ -1,5 +1,6 @@
 package com.payneteasy.mysql.scheduler.util;
 
+import com.payneteasy.mysql.scheduler.SchedulerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,10 +15,12 @@ public class ExecutorServiceUtils {
         LOG.info("{}: Stopping executor ...", aExecutorName);
 
         aExecutor.shutdown();
-
-        for(int i=0; i<10 && !aExecutor.isTerminated(); i++) {
-            LOG.info("{}:    Waiting threads to be done ...", aExecutorName);
-            aExecutor.awaitTermination(10, TimeUnit.SECONDS);
+        final int WAIT_COUNT = SchedulerConfig.getIntConfig(SchedulerConfig.Config.WAIT_SHUTDOWN_SECONDS);
+        final int INCREMENT = 10;
+        for(int i=0; i<WAIT_COUNT && !aExecutor.isTerminated(); i+=INCREMENT) {
+            LOG.info("{}:    Waiting threads to be done {}/{}...", new Object[] {aExecutorName, i, WAIT_COUNT});
+            boolean terminated = aExecutor.awaitTermination(INCREMENT, TimeUnit.SECONDS);
+            if(terminated) break;
         }
 
         if(!aExecutor.isTerminated()) {

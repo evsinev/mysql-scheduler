@@ -19,11 +19,13 @@ public class SchedulerConfig {
     
     public enum Config { 
         
-        MAX_THREADS("5")
+        MAX_THREADS("15")
         , SLEEP_MS("20000")
         , URL("jdbc:mysql://localhost:3306/sched?logger=Slf4JLogger")
         , USERNAME("java_sched")
-        , PASSWORD("123java_sched123");
+        , PASSWORD("123java_sched123")
+        , WAIT_SHUTDOWN_SECONDS("900")
+        ;
         
         Config(String aValue) {
             theValue = aValue;
