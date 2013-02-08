@@ -4,7 +4,7 @@
 
     <groupId>com.payneteasy</groupId>
     <artifactId>mysql-scheduler</artifactId>
-    <version>1.0-1-SNAPSHOT</version>
+    <version>1.0-2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>mysql-scheduler</name>
@@ -142,7 +142,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.18</version>
+            <version>5.1.22</version>
         </dependency>
 
 

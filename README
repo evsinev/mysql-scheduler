@@ -4,4 +4,4 @@ mvn clean install assembly:single
 
 ( cd scheduler-sql/mi/UT && ./ut-sched.sh )
 
-java -jar target/mysql-scheduler-1.0-1-SNAPSHOT-jar-with-dependencies.jar
+java -jar target/mysql-scheduler-1.0-2-SNAPSHOT-jar-with-dependencies.jar
