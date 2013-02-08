@@ -12,6 +12,15 @@ create procedure set_task_completed(i_stsk_id int(10))
              case
                when schedule_strategy = 'E' then
                  case
+                   when substring(retry_interval, -2) = 'ME' then
+                     date_add(
+                       last_day(
+                         date_add(v_exec_end_date,
+                                  interval substring(retry_interval, 1, length(retry_interval) - 1) month
+                                 )
+                       ),
+                       interval 23 hour
+                     )
                    when substring(retry_interval, -2) = 'MI' then
                      date_add(v_exec_end_date,
                               interval substring(retry_interval, 1, length(retry_interval) - 2) minute
@@ -27,6 +36,23 @@ create procedure set_task_completed(i_stsk_id int(10))
                  end
                when schedule_strategy = 'S' then
                  case
+                   when substring(retry_interval, -2) = 'ME' then
+                     date_add(
+                       last_day(
+                         date_add(
+                           task_start_date,
+                           interval   substring(retry_interval, 1, length(retry_interval) - 1)
+                                    * (  floor(
+                                             period_diff(date_format(v_exec_end_date, '%Y%m'),
+                                                         date_format(task_start_date, '%Y%m')
+                                                        )
+                                           / substring(retry_interval, 1, length(retry_interval) - 1)
+                                         )
+                                       + 1) month
+                         )
+                       ),
+                       interval 23 hour
+                     )
                    when substring(retry_interval, -2) = 'MI' then
                      date_add(
                        task_start_date,
@@ -93,6 +119,15 @@ create procedure set_task_completed(i_stsk_id int(10))
                  task_start_date
                when schedule_strategy = 'S' then
                  case
+                   when substring(retry_interval, -2) = 'ME' then
+                     date_add(
+                       last_day(
+                         date_sub(exec_next_date,
+                                  interval substring(retry_interval, 1, length(retry_interval) - 1) month
+                                 )
+                       ),
+                       interval 23 hour
+                     )
                    when substring(retry_interval, -2) = 'MI' then
                      date_sub(exec_next_date, interval substring(retry_interval, 1, length(retry_interval) - 2) minute)
                    when substring(retry_interval, -2) = 'HH' then
