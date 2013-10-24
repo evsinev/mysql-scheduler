@@ -1,4 +1,4 @@
-﻿use sched;
+﻿use ${db_sched};
 drop procedure if exists mi_create_java_sched;
 delimiter $$
 create procedure mi_create_java_sched(i_create_date datetime)
@@ -6,14 +6,13 @@ create procedure mi_create_java_sched(i_create_date datetime)
   begin
     declare ex_no_records_found   int(10) default 0;
     declare v_grant_str           varchar(512);
-    declare v_user_count          int(10);
 
     declare
       cur_privileges cursor for select concat("grant execute on procedure ",
                                               routine_schema,
                                               ".",
                                               routine_name,
-                                              " to 'java_sched'@'localhost'"
+                                              " to '${grant_user}'@'${grant_host}'"
                                              )
                                   from information_schema.routines
                                  where     routine_schema = 'sched'
@@ -22,19 +21,6 @@ create procedure mi_create_java_sched(i_create_date datetime)
                                             or routine_name like 'set%');
 
     declare continue handler for not found set ex_no_records_found = 1;
-    select count(1)
-      into v_user_count
-      from mysql.user
-     where user = 'java_sched';
-
-    if v_user_count = 0 then
-      set @sv_ddl_statement   = "create user 'java_sched'@'localhost' identified by '123java_sched123'";
-
-      prepare v_stmt from @sv_ddl_statement;
-      execute v_stmt;
-
-      deallocate prepare v_stmt;
-    end if;
 
     set ex_no_records_found   = 0;
 
@@ -61,4 +47,3 @@ $$
 delimiter ;
 call mi_create_java_sched(now());
 drop procedure if exists mi_create_java_sched;
-grant select on mysql.proc to 'java_sched' @'localhost';

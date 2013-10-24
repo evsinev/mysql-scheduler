@@ -1,11 +1,13 @@
 #!/bin/bash
 
-. ../functions.sh
-
-for i in `ls | grep -v UT | sort` ; do
+for i in `ls | grep ^R | sort` ; do
     if [ -d "$i" ]; then
-        logInfo "-  $i"
-        ( cd "$i" && ls ./*.sh > /dev/null 2>&1 && bash ./*.sh )
+        echo "-  $i"
+        cd "$i" 
+        for j in *.sh ; do
+          bash ./$j
+        done 
+        cd ..
     fi
 done
 

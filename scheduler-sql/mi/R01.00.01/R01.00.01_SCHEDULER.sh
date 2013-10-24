@@ -1,11 +1,9 @@
 #!/bin/bash
 
-. ../../functions.sh
+export mi_version=01.00.01
+export run_routines=true
 
-runScript R01.00.01_SCHEDULER.sql
-
-( cd ../../src && ./all-proc.sh )
-
-runScript R01.00.01_SCHEDULER_DML.sql
+(cd ../MI && ./run_MI_root.sh)
+(cd ../MI && ./run_MI_main.sh)
 
 exit $?
