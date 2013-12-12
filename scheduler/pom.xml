@@ -15,7 +15,7 @@
         <!-- DEFAULT PROJECT ENCODING is UTF-8 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jetty.version>8.0.4.v20111024</jetty.version>
-        <jdbc-proc.version>1.1-1</jdbc-proc.version>
+        <jdbc-proc.version>1.1-4</jdbc-proc.version>
     </properties>
 
     <dependencies>
