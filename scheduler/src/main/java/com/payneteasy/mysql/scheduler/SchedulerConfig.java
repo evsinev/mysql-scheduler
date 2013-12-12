@@ -20,6 +20,7 @@ public class SchedulerConfig {
     public enum Config { 
         
         MAX_THREADS("15")
+        , MAX_IDLE("15")
         , SLEEP_MS("20000")
         , URL("jdbc:mysql://localhost:3306/sched?logger=Slf4JLogger")
         , USERNAME("java_sched")

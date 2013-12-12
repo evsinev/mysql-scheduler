@@ -24,6 +24,7 @@ public class DataSourceModule extends AbstractModule {
         dataSource.setDefaultAutoCommit(false);
         dataSource.setValidationQuery("call create_collections()");
         dataSource.setMaxActive(SchedulerConfig.getIntConfig(SchedulerConfig.Config.MAX_THREADS));
+        dataSource.setMaxIdle(SchedulerConfig.getIntConfig(SchedulerConfig.Config.MAX_IDLE));
 
         return dataSource;
     }
