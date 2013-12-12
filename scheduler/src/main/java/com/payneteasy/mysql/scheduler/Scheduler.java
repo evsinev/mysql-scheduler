@@ -23,12 +23,14 @@ public class Scheduler {
                  runTasks();
              } catch (Exception e) {
                  LOG.error("Can't execute tasks", e);
-             }
-
-             try {
-                 Thread.sleep(SLEEP_MS);
-             } catch (InterruptedException e) {
-                 LOG.warn("Sleep interrupted: "+SLEEP_MS+" ms");
+             } finally {
+                 if (theIsStarted) {
+                     try {
+                         Thread.sleep(SLEEP_MS);
+                     } catch (InterruptedException e) {
+                         LOG.warn("Sleep interrupted: "+SLEEP_MS+" ms");
+                     }
+                 }
              }
 
 //             theIsStarted = false;
