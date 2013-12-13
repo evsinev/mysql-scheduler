@@ -61,6 +61,11 @@
             <url>http://oss.sonatype.org/content/repositories/snapshots</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
+        <site>
+            <id>local-site</id>
+            <name>Store only on local disk</name>
+            <url>file:///tmp/mysql-scheduler-site</url>
+        </site>
    	</distributionManagement>
 
     <properties>
