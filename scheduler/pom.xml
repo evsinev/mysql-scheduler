@@ -2,19 +2,72 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+   		<groupId>org.sonatype.oss</groupId>
+   		<artifactId>oss-parent</artifactId>
+   		<version>4</version>
+   	</parent>
+
     <groupId>com.payneteasy</groupId>
     <artifactId>mysql-scheduler</artifactId>
     <version>1.0-2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>mysql-scheduler</name>
-    <url>http://maven.apache.org</url>
+
+    <url>https://github.com/evsinev/mysql-scheduler</url>
+
+   	<scm>
+   		<connection>scm:git:git@github.com:evsinev/mysql-scheduler.git</connection>
+   		<developerConnection>scm:git:git@github.com:evsinev/mysql-scheduler.git</developerConnection>
+   		<url>https://github.com/evsinev/mysql-scheduler</url>
+   	</scm>
+
+   	<licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+   	</licenses>
+
+    <developers>
+   		<developer>
+   			<id>esinev</id>
+   			<email>esinev@gmail.com</email>
+   		</developer>
+   		<developer>
+   			<id>mgoryachkin</id>
+   			<email>mgoryachkin@gmail.com</email>
+   		</developer>
+        <developer>
+            <id>roman.puchkovskiy</id>
+            <email>roman.puchkovskiy@gmail.com</email>
+            <name>Roman Puchkovskiy</name>
+        </developer>
+   	</developers>
+
+   	<!--
+       -      Distributions
+       -->
+   	<distributionManagement>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <name>sonatype oss RELEASE repository</name>
+            <url>http://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>sonatype oss SNAPSHOT repository</name>
+            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+   	</distributionManagement>
 
     <properties>
         <slf4j.version>1.6.2</slf4j.version>
         <!-- DEFAULT PROJECT ENCODING is UTF-8 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jetty.version>8.0.4.v20111024</jetty.version>
         <jdbc-proc.version>1.1-4</jdbc-proc.version>
     </properties>
 
