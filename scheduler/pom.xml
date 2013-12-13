@@ -9,7 +9,7 @@
 
     <groupId>com.payneteasy</groupId>
     <artifactId>mysql-scheduler</artifactId>
-    <version>1.0-4-SNAPSHOT</version>
+    <version>1.0-4</version>
     <packaging>jar</packaging>
 
     <name>mysql-scheduler</name>
@@ -202,5 +202,28 @@
 
         </plugins>
     </build>
+
+    <profiles>
+   		<profile>
+   			<id>deploy</id>
+   			<build>
+   				<plugins>
+   					<plugin>
+   						<groupId>org.apache.maven.plugins</groupId>
+   						<artifactId>maven-gpg-plugin</artifactId>
+   						<executions>
+   							<execution>
+   								<id>sign-artifacts</id>
+   								<phase>verify</phase>
+   								<goals>
+   									<goal>sign</goal>
+   								</goals>
+   							</execution>
+   						</executions>
+   					</plugin>
+   				</plugins>
+   			</build>
+       	</profile>
+   	</profiles>
 
 </project>
