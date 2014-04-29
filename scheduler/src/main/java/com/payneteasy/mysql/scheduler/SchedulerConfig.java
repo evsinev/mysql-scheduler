@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,7 +21,12 @@ public class SchedulerConfig {
         MAX_THREADS("15")
         , MAX_IDLE("15")
         , SLEEP_MS("20000")
-        , URL("jdbc:mysql://localhost:3306/sched?logger=Slf4JLogger")
+        , URL("jdbc:mysql://localhost:3306/sched" +
+                "?logger=Slf4JLogger" +
+                "&noAccessToProcedureBodies=true" +
+                "&useInformationSchema=true" +
+                "&autoReconnect=false" +
+                "&characterEncoding=utf8")
         , USERNAME("java_sched")
         , PASSWORD("123java_sched123")
         , WAIT_SHUTDOWN_SECONDS("900")

@@ -72,7 +72,8 @@
         <slf4j.version>1.6.2</slf4j.version>
         <!-- DEFAULT PROJECT ENCODING is UTF-8 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdbc-proc.version>1.1-4</jdbc-proc.version>
+        <jdbc-proc.version>1.1-6-SNAPSHOT</jdbc-proc.version>
+
     </properties>
 
     <dependencies>
@@ -150,7 +151,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.22</version>
+            <version>5.1.22-3</version>
         </dependency>
 
 
