@@ -35,6 +35,15 @@ die() {
     return $errorCode
 }
 
+setPamPassword(){
+  if [ ! $MYSQL_PWD ] ; then
+    logWarn "Prepare to enter $USER password and press ENTER to continue ..." && read
+    echo -n "Enter password: "
+    read -s pwd
+    export MYSQL_PWD=$pwd
+  fi
+}
+
 runScript() {
     aFirst=$1
     aScript=${aFirst##*/*/}
@@ -110,7 +119,7 @@ runRootPam() {
     aScript=${aFirst##*/*/}
 
     if [ -f "$aFirst" ]; then
-      logWarn "Prepare to enter $USER password and press ENTER to continue ..." && read
+      setPamPassword
       mkdir -p target
       logInfo "Installing $aScript to localhost:$mi_port ..."
       cat $aFirst | \
@@ -166,7 +175,7 @@ runChangePasswordPam() {
     aScript=${aFirst##*/*/}
 
     if [ -f "$aFirst" ]; then
-      logWarn "Prepare to enter $USER password and press ENTER to continue ..." && read
+      setPamPassword
       mkdir -p target
       logInfo "Installing $aScript to localhost:$mi_port ..."
       cat $aFirst | \
@@ -181,7 +190,7 @@ runChangePasswordPam() {
         rm -fr target/create_java_users.sql.log
         rm -fr target/create_java_users.sql
         aScript=create_java_users.sql
-        logWarn "Prepare to enter $USER password and press ENTER to continue ..." && read
+        setPamPassword
         mkdir -p target
         logInfo "Creating java users localhost:$mi_port ..."
         cat /dev/null > target/$aScript
@@ -224,7 +233,7 @@ runRestorePasswords()
 runRestorePasswordsPam()
 {
     aScript=restore_passwords.sql
-    logWarn "Prepare to enter $USER password and press ENTER to continue ..." && read
+    setPamPassword
     mkdir -p target
     logInfo "Restoring passwords to localhost:$mi_port ..."
     cat /dev/null > target/$aScript
