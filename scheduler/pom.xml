@@ -72,7 +72,7 @@
         <slf4j.version>1.6.2</slf4j.version>
         <!-- DEFAULT PROJECT ENCODING is UTF-8 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdbc-proc.version>1.1-6-SNAPSHOT</jdbc-proc.version>
+        <jdbc-proc.version>1.1-12</jdbc-proc.version>
 
     </properties>
 
