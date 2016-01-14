@@ -9,7 +9,7 @@
 
     <groupId>com.payneteasy</groupId>
     <artifactId>mysql-scheduler</artifactId>
-    <version>1.0-8-SNAPSHOT</version>
+    <version>1.0-9-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>mysql-scheduler</name>
@@ -209,7 +209,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.2.1</version>
+                <version>2.5.3</version>
                 <executions>
                     <execution>
                         <id>default</id>
