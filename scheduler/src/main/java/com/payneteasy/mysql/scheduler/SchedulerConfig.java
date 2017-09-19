@@ -18,7 +18,7 @@ public class SchedulerConfig {
     
     public enum Config { 
         
-        MAX_THREADS("15")
+          MAX_THREADS("40")
         , MAX_IDLE("15")
         , SLEEP_MS("20000")
         , URL("jdbc:mysql://localhost:3306/sched" +
@@ -43,6 +43,10 @@ public class SchedulerConfig {
     
     static {
 
+        // priority
+        // 1. file
+        // 2. environment
+        // 3. property
         Properties fileProperties = new Properties();
 
         final String config_file = System.getProperty("CONFIG_FILE");
@@ -64,8 +68,16 @@ public class SchedulerConfig {
         LOG.info("Config values:");
         theMap = new HashMap<Config, String>();        
         for (Config config : Config.values()) {
+            // get from property
             String value = System.getProperty(config.name());
-            if(!StringUtils.hasText(value)) {
+
+            // get from ENV
+            if(isEmpty(value)) {
+                value = System.getenv(config.name());
+            }
+
+            // get from FILE
+            if(isEmpty(value)) {
                 value = fileProperties.getProperty(config.name(), config.theValue);
             }
 
@@ -73,7 +85,11 @@ public class SchedulerConfig {
             theMap.put(config, value);
         }
     }
-    
+
+    private static boolean isEmpty(String value) {
+        return !StringUtils.hasText(value);
+    }
+
     public static String getConfig(Config aConfig) {
         return theMap.get(aConfig);
     }
