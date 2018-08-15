@@ -57,7 +57,7 @@ public class SchedulerModule extends AbstractModule {
 
     @Provides
     @Singleton
-    ISchedulerDao provideCompanyDao(JdbcTemplate jdbcTemplate, DAOMethodInfo daoMethodInfo) {
+    ISchedulerDao provideSchedulerDao(JdbcTemplate jdbcTemplate, DAOMethodInfo daoMethodInfo) {
         return new StoredProcedureDaoProvider<ISchedulerDao>(ISchedulerDao.class, jdbcTemplate, daoMethodInfo).get();
     }
 

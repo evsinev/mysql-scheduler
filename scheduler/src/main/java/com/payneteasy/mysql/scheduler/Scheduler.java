@@ -7,7 +7,11 @@ import com.payneteasy.mysql.scheduler.util.TaskExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.util.List;
+
+import static com.payneteasy.mysql.scheduler.SchedulerConfig.getShutdownQueries;
+import static com.payneteasy.mysql.scheduler.SchedulerConfig.getStartupQueries;
 
 public class Scheduler {
 
@@ -17,7 +21,14 @@ public class Scheduler {
 
     public void start() {
         theIsStarted = true;
-         while ( theIsStarted ) {
+
+        try {
+            theSchedulerService.runRawQueries(getStartupQueries());
+        } catch (SQLException e) {
+            throw new IllegalStateException("Cannot execute startup queries", e);
+        }
+
+        while ( theIsStarted ) {
 
              try {
                  runTasks();
@@ -39,6 +50,13 @@ public class Scheduler {
 
     public void stop() {
         theIsStarted = false;
+
+        try {
+            theSchedulerService.runRawQueries(getShutdownQueries());
+        } catch (Exception e) {
+            LOG.error("Cannot execute shutdown queries", e);
+        }
+
         try {
             ExecutorServiceUtils.shutdownAndAwaitTermination(theTaskExecutor, "scheduler");
         } catch (InterruptedException e) {

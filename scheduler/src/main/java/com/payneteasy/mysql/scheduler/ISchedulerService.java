@@ -4,6 +4,7 @@ import com.google.inject.ImplementedBy;
 import com.payneteasy.mysql.scheduler.dao.model.TTask;
 import com.payneteasy.mysql.scheduler.impl.SchedulerServiceImpl;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @ImplementedBy(SchedulerServiceImpl.class)
@@ -17,4 +18,5 @@ public interface ISchedulerService {
 
     void setTaskFailed(long aTaskId, String aErrorMessage);
 
+    void runRawQueries(List<String> aQueries) throws SQLException;
 }
