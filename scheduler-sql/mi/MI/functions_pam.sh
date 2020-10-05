@@ -97,6 +97,9 @@ runRoot() {
     aFirst=$1
     aScript=${aFirst##*/*/}
 
+    aGrantUser=$2
+    aGrantHost=$3
+
     if [ -f "$aFirst" ]; then
       mkdir -p target
       logInfo "Installing $aScript to localhost:$mi_port ..."
@@ -117,6 +120,9 @@ runRoot() {
 runRootPam() {
     aFirst=$1
     aScript=${aFirst##*/*/}
+
+    aGrantUser=$2
+    aGrantHost=$3
 
     if [ -f "$aFirst" ]; then
       setPamPassword
