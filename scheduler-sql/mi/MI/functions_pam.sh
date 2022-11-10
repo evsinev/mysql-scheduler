@@ -130,6 +130,8 @@ runRootPam() {
       logInfo "Installing $aScript to localhost:$mi_port ..."
       cat $aFirst | \
         sed s/\${db_sched}/$db_sched/g | \
+        sed s/\${grant_user}/$aGrantUser/g | \
+        sed s/\${grant_host}/$aGrantHost/g | \
         sed s/\${mi_password}/$mi_password/g | \
         sed s/\${sleep_interval}/$sleep_interval/g | \
         tee target/$aScript | \
