@@ -1,3 +1,6 @@
+## How to build the project
+
+```java
 git clone git@github.com:evsinev/mysql-scheduler.git
 cd mysql-scheduler
 mvn clean install assembly:single
@@ -5,11 +8,14 @@ mvn clean install assembly:single
 ( cd scheduler-sql/mi/UT && ./ut-sched.sh )
 
 java -jar target/mysql-scheduler-1.0-2-SNAPSHOT-jar-with-dependencies.jar
+```
 
 
+## Configure master install 
 
-~/env/instance_sched.sh
+Add to the ~/env/instance_sched.sh
 
+```bash
 #!/bin/bash
 
 # instance name
@@ -37,3 +43,5 @@ db_sched=sched
 
 # pass to store passwords file, check permissions for mysql55 and mi users
 passwords_file="pwd"
+```
+
