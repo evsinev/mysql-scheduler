@@ -218,7 +218,7 @@ catPasswords()
 {
     while IFS=$'\t' read col1 col2 col3
     do
-      echo "update mysql.user set password = '$col3' where host = 'localhost' and user = '$col2'; " >> $1
+      echo "set password for '$col2'@'localhost' = '$col3'; " >> $1
     done <  $2
 }
 
