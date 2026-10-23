@@ -9,6 +9,8 @@ import com.googlecode.jdbcproc.daofactory.guice.InitJdbcProcModule;
 import com.googlecode.jdbcproc.daofactory.guice.StoredProcedureDaoProvider;
 import com.googlecode.jdbcproc.daofactory.impl.dbstrategy.ICallableStatementSetStrategyFactory;
 import com.googlecode.jdbcproc.daofactory.impl.dbstrategy.impl.CallableStatementSetStrategyFactoryIndexImpl;
+import com.googlecode.jdbcproc.daofactory.impl.parameterconverter.ParameterConverterService;
+import com.googlecode.jdbcproc.daofactory.impl.parameterconverter.ParameterConverterServiceImpl;
 import com.payneteasy.mysql.scheduler.dao.ISchedulerDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +38,10 @@ public class SchedulerModule extends AbstractModule {
                 aBuilder.to(CallableStatementSetStrategyFactoryIndexImpl.class);
             }
         });
+
+        // InitJdbcProcModule 2.0-x does not call its bindParameterConverterService();
+        // false is what DaoMethodInfoFactory uses
+        bind(ParameterConverterService.class).toInstance(new ParameterConverterServiceImpl(false));
 
         install(new DataSourceModule());
 

@@ -12,6 +12,9 @@ public class SchedulerConfig {
     
     private static final Logger LOG = LoggerFactory.getLogger(SchedulerConfig.class);
     
+    private static final String MYSQL_URL_PREFIX = "jdbc:mysql:";
+    private static final String MARIADB_URL_PREFIX = "jdbc:mariadb:";
+
     private static Map<Config, String> theMap ;
     
     public enum Config { 
@@ -19,12 +22,7 @@ public class SchedulerConfig {
           MAX_THREADS("40")
         , MAX_IDLE("15")
         , SLEEP_MS("20000")
-        , URL("jdbc:mysql://localhost:3306/sched" +
-                "?logger=Slf4JLogger" +
-                "&noAccessToProcedureBodies=true" +
-                "&useInformationSchema=true" +
-                "&autoReconnect=false" +
-                "&characterEncoding=utf8")
+        , URL("jdbc:mariadb://localhost:3306/sched")
         , USERNAME("java_sched")
         , PASSWORD("123java_sched123")
         , PRIVILEGED_USERNAME("root")
@@ -77,6 +75,13 @@ public class SchedulerConfig {
 
             LOG.info("    {} = {}", config, config.name().contains("PASSWORD") ? "xxxx" : value);
             theMap.put(config, value);
+        }
+
+        // MariaDB Connector/J does not accept jdbc:mysql: URLs, so old configs are rewritten
+        String url = theMap.get(Config.URL);
+        if (url.startsWith(MYSQL_URL_PREFIX)) {
+            theMap.put(Config.URL, MARIADB_URL_PREFIX + url.substring(MYSQL_URL_PREFIX.length()));
+            LOG.warn("    URL: replaced {} with {}", MYSQL_URL_PREFIX, MARIADB_URL_PREFIX);
         }
         LOG.info("    Startup queries (STARTUP_QUERY_*):");
         for (String query : getStartupQueries()) {

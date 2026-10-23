@@ -1,15 +1,34 @@
 ## How to build the project
 
-```java
+Requires Java 21 and Maven 3.9+.
+
+```bash
 git clone git@github.com:evsinev/mysql-scheduler.git
-cd mysql-scheduler
-mvn clean install assembly:single
+cd mysql-scheduler/scheduler
+mvn clean verify
 
-( cd scheduler-sql/mi/UT && ./ut-sched.sh )
+( cd ../scheduler-sql/mi/UT && ./ut-sched.sh )
 
-java -jar target/mysql-scheduler-1.0-2-SNAPSHOT-jar-with-dependencies.jar
+java -jar target/scheduler-2.0-1-SNAPSHOT.jar
 ```
 
+## Database connection
+
+The scheduler uses MariaDB Connector/J. Set `URL` (system property, environment variable or `CONFIG_FILE`),
+for example `jdbc:mariadb://localhost:3306/sched`. Old `jdbc:mysql:` URLs are rewritten to `jdbc:mariadb:`
+at startup; MySQL Connector/J 5.1 options in them (`logger`, `noAccessToProcedureBodies`, ...) are ignored.
+TLS options are not translated one to one: `useSSL=true` becomes `sslMode=verify-full` and
+`verifyServerCertificate=false` is not taken into account, so set `sslMode` (and the trust store) explicitly.
+
+## Release
+
+Push a tag `mysql-scheduler-<version>`, e.g. `mysql-scheduler-2.0-1`. GitHub Actions builds the project with
+this version and attaches `scheduler-<version>.jar` and its `.sha256` to the GitHub release.
+
+```bash
+git tag mysql-scheduler-2.0-1
+git push origin mysql-scheduler-2.0-1
+```
 
 ## Configure master install 
 
