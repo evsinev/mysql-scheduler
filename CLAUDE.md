@@ -18,7 +18,7 @@
 cd scheduler && mvn -B clean verify   # target/scheduler-<version>.jar — fat jar
 ```
 
-Тестов в проекте нет: изменения кода и зависимостей проверяем живым прогоном (ниже).
+Юнит-тестов нет; тест — живой прогон `scripts/live-test.sh` (ниже), CI запускает его на каждый push/PR.
 
 ## Что легко сломать
 
@@ -39,19 +39,15 @@ cd scheduler && mvn -B clean verify   # target/scheduler-<version>.jar — fat j
 
 ## Живой прогон
 
-MariaDB в docker, схема — штатными MI-скриптами:
+`scripts/live-test.sh [jar]` (нужен docker, jar сначала собрать): поднимает MariaDB 10.6.18
+(`MARIADB_IMAGE`, `DB_PORT`, `KEEP_DB=1` — оставить контейнер), ставит схему штатными MI-скриптами
+(`all_mi.sh`), запускает jar с успешной и падающей задачами и проверяет: успешная → `C` и её SQL выполнен,
+падающая → `F` с текстом ошибки в `scheduled_task_logs`, startup/shutdown-запросы выполнены, остановка по
+SIGTERM. Два прогона: старый `jdbc:mysql:` URL из переменных окружения и всё из `CONFIG_FILE`.
 
-1. `docker run -d --name sched-mariadb-test -e MARIADB_ROOT_PASSWORD=charpa -p 127.0.0.1:33306:3306 mariadb:10.6.18 --skip-name-resolve=0`
-   (без `--skip-name-resolve=0` MI-скрипты не войдут как `sched@localhost` по TCP).
-2. В контейнер: `/root/env/instance_sched.sh` (как в README, `use_pam=false`,
-   `host_prod_sched=(localhost %)`), каталог `scheduler-sql`; создать `java_sched@'%'` и
-   `java_sched@localhost` с паролем `123java_sched123`; `cd scheduler-sql/mi && HOME=/root bash ./all_mi.sh`.
-3. Добавить в `scheduled_tasks` успешную и падающую задачи (`retry_interval='1MI'`,
-   `schedule_strategy='S'`, `exec_next_date=now()`), запустить jar с `URL=jdbc:mysql://127.0.0.1:33306/sched?...`
-   (старый формат) и `jdbc:mariadb://...`, `PRIVILEGED_PASSWORD=charpa`, `STARTUP_QUERY_0`/`SHUTDOWN_QUERY_0`,
-   `SLEEP_MS=2000`; остановить SIGTERM.
-4. Ожидаем: успешная задача → `C`, падающая → `F` с текстом ошибки в `scheduled_task_logs`, startup/shutdown
-   запросы выполнены, executor остановлен. Контейнер после проверки удалить.
+- Без `--skip-name-resolve=0` MI-скрипты не войдут как `sched@localhost` по TCP.
+- `all_mi.sh` всегда завершается с кодом 0 — ошибки ищем в его выводе.
+- Новое поведение — новая проверка в скрипте, и сначала убедиться, что без исправления она падает.
 
 ## Проверки перед PR
 

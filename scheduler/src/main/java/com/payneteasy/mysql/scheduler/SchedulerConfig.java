@@ -15,6 +15,8 @@ public class SchedulerConfig {
     private static final String MYSQL_URL_PREFIX = "jdbc:mysql:";
     private static final String MARIADB_URL_PREFIX = "jdbc:mariadb:";
 
+    private static final Properties theFileProperties = new Properties();
+
     private static Map<Config, String> theMap ;
     
     public enum Config { 
@@ -46,18 +48,11 @@ public class SchedulerConfig {
         // 2. environment
         // 3. CONFIG_FILE
         // 4. default
-        Properties fileProperties = new Properties();
-
         final String config_file = System.getProperty("CONFIG_FILE");
         if(StringUtils.hasText(config_file)) {
             LOG.info("Loading config file {}...", config_file);
-            try {
-                FileReader in = new FileReader(config_file);
-                try {
-                    fileProperties.load(in);
-                } catch (IOException e) {
-                    in.close();
-                }
+            try (FileReader in = new FileReader(config_file)) {
+                theFileProperties.load(in);
             } catch (IOException e) {
                 LOG.error("Error reading properties from "+config_file, e);
                 System.exit(1);
@@ -67,11 +62,10 @@ public class SchedulerConfig {
         LOG.info("Config values:");
         theMap = new HashMap<Config, String>();        
         for (Config config : Config.values()) {
+            // an empty value from CONFIG_FILE (e.g. PASSWORD=) is kept, the default is used only for a missing key
             String value = getValue(config);
-
-            // get from FILE
-            if(isEmpty(value)) {
-                value = fileProperties.getProperty(config.name(), config.theValue);
+            if(value == null) {
+                value = config.theValue;
             }
 
             LOG.info("    {} = {}", config, config.name().contains("PASSWORD") ? "xxxx" : value);
@@ -106,6 +100,11 @@ public class SchedulerConfig {
         // get from ENV
         if(isEmpty(value)) {
             value = System.getenv(key);
+        }
+
+        // get from FILE
+        if(isEmpty(value)) {
+            value = theFileProperties.getProperty(key);
         }
         return value;
     }
