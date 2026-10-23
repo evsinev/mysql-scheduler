@@ -42,9 +42,10 @@ public class SchedulerConfig {
     static {
 
         // priority
-        // 1. file
+        // 1. system property
         // 2. environment
-        // 3. property
+        // 3. CONFIG_FILE
+        // 4. default
         Properties fileProperties = new Properties();
 
         final String config_file = System.getProperty("CONFIG_FILE");
