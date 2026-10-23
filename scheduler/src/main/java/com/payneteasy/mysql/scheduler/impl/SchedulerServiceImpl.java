@@ -25,7 +25,18 @@ public class SchedulerServiceImpl implements ISchedulerService {
     private static final Logger LOG = LoggerFactory.getLogger(SchedulerServiceImpl.class);
 
     public List<TTask> getTasks(int aMaxTasks) {
-        return theSchedulerDao.getTasks(aMaxTasks);
+        List<TTask> tasks = theSchedulerDao.getTasks(aMaxTasks);
+
+        if (!LOG.isDebugEnabled()) {
+            return tasks;
+        }
+
+        long id = System.currentTimeMillis();
+        LOG.debug("{}: Got tasks: {}", id, tasks.size());
+        for (TTask task : tasks) {
+            LOG.debug("{}:    task: {}: {}", id, task.getTaskId(), task.getTaskName());
+        }
+        return tasks;
     }
 
     public void setTaskStarting(long aTaskId) {

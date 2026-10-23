@@ -18,4 +18,12 @@ public class TTask {
     private long theTaskId;
     /** Task name */
     private String theTaskName;
+
+    @Override
+    public String toString() {
+        return "TTask {" +
+                "id=" + theTaskId +
+                ", name='" + theTaskName + '\'' +
+                '}';
+    }
 }
