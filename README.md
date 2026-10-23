@@ -50,9 +50,8 @@ properties file given by `-DCONFIG_FILE=/path/to/file`, default.
 | `SLEEP_MS` | `20000` | pause between polls of the database |
 | `WAIT_SHUTDOWN_SECONDS` | `900` | how long to wait for running tasks on shutdown |
 
-Startup and shutdown queries are read from system properties or environment variables only (not from
-`CONFIG_FILE`): `STARTUP_QUERY_0`, `STARTUP_QUERY_1`, ... and `SHUTDOWN_QUERY_0`, ...; numbering starts at 0
-and stops at the first missing number. They run with autocommit as `PRIVILEGED_USERNAME`. A failed startup
+Startup and shutdown queries are set the same way: `STARTUP_QUERY_0`, `STARTUP_QUERY_1`, ... and
+`SHUTDOWN_QUERY_0`, ...; numbering starts at 0 and stops at the first missing number. They run with autocommit as `PRIVILEGED_USERNAME`. A failed startup
 query stops the scheduler, a failed shutdown query is only logged.
 
 ## Database setup
@@ -163,7 +162,15 @@ mvn clean verify
 java -jar target/scheduler-*.jar
 ```
 
-Development checks (live run against MariaDB, OWASP scan, review) are described in [CLAUDE.md](CLAUDE.md).
+Live test (needs Docker): starts MariaDB, installs the schema with the MI scripts and runs real tasks with
+the built jar — once with an old `jdbc:mysql:` URL from environment variables and once with `CONFIG_FILE`.
+CI runs it on every push and pull request.
+
+```bash
+scripts/live-test.sh
+```
+
+Other development checks (OWASP scan, review) are described in [CLAUDE.md](CLAUDE.md).
 
 ## Release
 

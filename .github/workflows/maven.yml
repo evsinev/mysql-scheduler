@@ -29,3 +29,6 @@ jobs:
 
     - name: Build
       run: mvn -B verify
+
+    - name: Live test against MariaDB
+      run: ../scripts/live-test.sh
