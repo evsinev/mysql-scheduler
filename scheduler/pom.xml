@@ -1,90 +1,87 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-   		<groupId>org.sonatype.oss</groupId>
-   		<artifactId>oss-parent</artifactId>
-   		<version>4</version>
-   	</parent>
-
     <groupId>com.payneteasy</groupId>
     <artifactId>mysql-scheduler</artifactId>
-    <version>1.0-11-SNAPSHOT</version>
+    <version>2.0-1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>mysql-scheduler</name>
 
     <url>https://github.com/evsinev/mysql-scheduler</url>
 
-   	<scm>
-   		<connection>scm:git:git@github.com:evsinev/mysql-scheduler.git</connection>
-   		<developerConnection>scm:git:git@github.com:evsinev/mysql-scheduler.git</developerConnection>
-   		<url>https://github.com/evsinev/mysql-scheduler</url>
-   	  <tag>HEAD</tag>
-  </scm>
+    <scm>
+        <connection>scm:git:git@github.com:evsinev/mysql-scheduler.git</connection>
+        <developerConnection>scm:git:git@github.com:evsinev/mysql-scheduler.git</developerConnection>
+        <url>https://github.com/evsinev/mysql-scheduler</url>
+        <tag>HEAD</tag>
+    </scm>
 
-   	<licenses>
+    <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
         </license>
-   	</licenses>
+    </licenses>
 
     <developers>
-   		<developer>
-   			<id>esinev</id>
-   			<email>esinev@gmail.com</email>
-   		</developer>
-   		<developer>
-   			<id>mgoryachkin</id>
-   			<email>mgoryachkin@gmail.com</email>
-   		</developer>
+        <developer>
+            <id>esinev</id>
+            <email>esinev@gmail.com</email>
+        </developer>
+        <developer>
+            <id>mgoryachkin</id>
+            <email>mgoryachkin@gmail.com</email>
+        </developer>
         <developer>
             <id>roman.puchkovskiy</id>
             <email>roman.puchkovskiy@gmail.com</email>
             <name>Roman Puchkovskiy</name>
         </developer>
-   	</developers>
-
-   	<!--
-       -      Distributions
-       -->
-   	<distributionManagement>
-        <repository>
-            <id>sonatype-nexus-staging</id>
-            <name>sonatype oss RELEASE repository</name>
-            <url>http://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-        </repository>
-        <snapshotRepository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>sonatype oss SNAPSHOT repository</name>
-            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-        <site>
-            <id>local-site</id>
-            <name>Store only on local disk</name>
-            <url>file:///tmp/mysql-scheduler-site</url>
-        </site>
-   	</distributionManagement>
+    </developers>
 
     <properties>
-        <slf4j.version>1.6.2</slf4j.version>
         <!-- DEFAULT PROJECT ENCODING is UTF-8 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdbc-proc.version>1.1-12</jdbc-proc.version>
+        <maven.compiler.release>21</maven.compiler.release>
 
+        <jdbc-proc.version>2.0-12</jdbc-proc.version>
+        <spring.version>7.0.10</spring.version>
+        <slf4j.version>2.0.19</slf4j.version>
+        <logback.version>1.6.5</logback.version>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.9</version>
-            <scope>test</scope>
-        </dependency>
+    <repositories>
+        <!-- jdbc-proc 2.0-6+ is published only here -->
+        <repository>
+            <id>pne</id>
+            <name>payneteasy public repo</name>
+            <url>https://maven.pne.io</url>
+        </repository>
+    </repositories>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- jdbc-proc declares spring 3.0.0 -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${spring.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- guice 7.0.0 brings guava 31.0.1-jre (CVE-2023-2976, CVE-2020-8908) -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>33.7.2-jre</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -92,94 +89,131 @@
         </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>log4j-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>0.9.29</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>0.9.29</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>r09</version>
+            <version>${logback.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
-            <version>3.0</version>
-            <!--<scope>provided</scope>-->
-        </dependency>
-
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.14</version>
+            <version>7.0.0</version>
+            <exclusions>
+                <!-- the same org.aopalliance classes are in spring-aop -->
+                <exclusion>
+                    <groupId>aopalliance</groupId>
+                    <artifactId>aopalliance</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- proc jdbc -->
-         <dependency>
-             <artifactId>jdbc-proc-daofactory</artifactId>
-             <groupId>com.googlecode.jdbc-proc.jdbc-proc</groupId>
-             <version>${jdbc-proc.version}</version>
-         </dependency>
+        <dependency>
+            <groupId>com.googlecode.jdbc-proc.jdbc-proc</groupId>
+            <artifactId>jdbc-proc-daofactory-ee10</artifactId>
+            <version>${jdbc-proc.version}</version>
+        </dependency>
+
+        <!-- provided in jdbc-proc, but DaoMethodInfoGuice needs it at runtime -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.14.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+        </dependency>
+
+        <!-- TransactionInterceptor needs spring-context and spring-aop (org.aopalliance) -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
 
         <!-- DBCP -->
         <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>1.4</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+            <version>2.14.0</version>
         </dependency>
 
-        <!-- mysql driver -->
+        <!-- mariadb driver -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.22-3</version>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>3.5.11</version>
         </dependency>
-
-
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.6.3</version>
+                <executions>
+                    <execution>
+                        <id>enforce</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[21,)</version>
+                                </requireJavaVersion>
+                                <requireMavenVersion>
+                                    <version>[3.9,)</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.15.0</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                    <encoding>utf-8</encoding>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
-                    <optimize>false</optimize>
                 </configuration>
             </plugin>
+
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.6</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.5.0</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.7.1</version>
                 <configuration>
                     <archive>
                         <manifest>
                             <mainClass>com.payneteasy.mysql.scheduler.Start</mainClass>
                         </manifest>
+                        <manifestEntries>
+                            <!-- mariadb-java-client keeps its Java 11+ classes (TCP keepalive options) in META-INF/versions -->
+                            <Multi-Release>true</Multi-Release>
+                        </manifestEntries>
                     </archive>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -197,57 +231,7 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-idea-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <downloadSources>true</downloadSources>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
-                <executions>
-                    <execution>
-                        <id>default</id>
-                        <goals>
-                            <goal>perform</goal>
-                        </goals>
-                        <configuration>
-                            <pomFileName>scheduler/pom.xml</pomFileName>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
         </plugins>
     </build>
-
-    <profiles>
-   		<profile>
-   			<id>deploy</id>
-   			<build>
-   				<plugins>
-   					<plugin>
-   						<groupId>org.apache.maven.plugins</groupId>
-   						<artifactId>maven-gpg-plugin</artifactId>
-   						<executions>
-   							<execution>
-   								<id>sign-artifacts</id>
-   								<phase>verify</phase>
-   								<goals>
-   									<goal>sign</goal>
-   								</goals>
-   							</execution>
-   						</executions>
-   					</plugin>
-   				</plugins>
-   			</build>
-       	</profile>
-   	</profiles>
 
 </project>

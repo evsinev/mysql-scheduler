@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.payneteasy.mysql.scheduler.ISchedulerService;
 import com.payneteasy.mysql.scheduler.dao.ISchedulerDao;
 import com.payneteasy.mysql.scheduler.dao.model.TTask;
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Propagation;
@@ -59,13 +59,13 @@ public class SchedulerServiceImpl implements ISchedulerService {
 
         BasicDataSource dataSource = new BasicDataSource();
         try {
-            dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+            dataSource.setDriverClassName("org.mariadb.jdbc.Driver");
             dataSource.setUrl(getConfig(URL));
             dataSource.setUsername(getConfig(PRIVILEGED_USERNAME));
             dataSource.setPassword(getConfig(PRIVILEGED_PASSWORD));
             dataSource.setDefaultAutoCommit(true);
             dataSource.setValidationQuery("call create_collections()");
-            dataSource.setMaxActive(1);
+            dataSource.setMaxTotal(1);
             dataSource.setMaxIdle(1);
 
             Connection connection = dataSource.getConnection();

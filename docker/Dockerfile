@@ -1,6 +1,6 @@
-FROM openjdk:8-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 
-ADD https://github.com/evsinev/mysql-scheduler/releases/download/mysql-scheduler-1.0-10/scheduler-1.0-10.jar /scheduler.jar
+ADD https://github.com/evsinev/mysql-scheduler/releases/download/mysql-scheduler-2.0-1/scheduler-2.0-1.jar /scheduler.jar
 
-ENV URL "jdbc:mysql://mysql:3306/sched?logger=Slf4JLogger&noAccessToProcedureBodies=true&useInformationSchema=true&autoReconnect=false&characterEncoding=utf8"
-CMD ["/usr/bin/java", "-jar", "/scheduler.jar"]
+ENV URL="jdbc:mariadb://mysql:3306/sched"
+CMD ["java", "-jar", "/scheduler.jar"]
